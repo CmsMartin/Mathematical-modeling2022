@@ -1,13 +1,15 @@
 \documentclass[UTF8]{ctexart}
 \usepackage{listings}
-\lstset{language = Matlab}
 \title{NULL}
 \author{CMS TMZ Bear}
 \date{\today}
 \begin{document}
 \maketitle
-\begin{lstlistings}
-    ezplot('x^2', [0,2])
-    hold on
-\end{lstlistings}
+\begin{lstlisting}[language=c++]
+    #include <iostream>
+    int main()
+    {
+        std::cout << "Hello, World!" << std::endl;
+    }  
+\end{lstlisting}
 \end{document}
