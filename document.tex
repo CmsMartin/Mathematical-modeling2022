@@ -3,6 +3,9 @@
 
 \documentclass{cumcmthesis}
 \usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{footnote}
 % \documentclass[withoutpreface,bwprint]{cumcmthesis} %去掉封面与编号页
 
 \usepackage{url}
@@ -71,6 +74,7 @@ $e_i$	    & 第 $i$ 条边的边权 \\ \hline
 $u_i$       & 第 $i$ 条边的起点 \\ \hline
 $v_i$       & 第 $i$ 条边的终点 \\ \hline
 $d_{i,j}$   & 第 $i$ 个点和第 $j$ 个点最短路径长度 \\ \hline
+$rk_{i,j}$  & 第 $i$ 到其他所有结点中第 $j$ 小的结点编号 \\ \hline
 \end{tabular}
 \end{savenotes}
 \end{center}
@@ -91,12 +95,55 @@ $d_{i,j}$   & 第 $i$ 个点和第 $j$ 个点最短路径长度 \\ \hline
 
 接下来考虑如何求解绝对重心。
 
+假设图的绝对重心在边上，枚举每一条边 $(u_k,v_k)$，钦定图的绝对重心 $c$ 在这一条边上，假设其距 $u_k$ 的距离为 $x(x \le e_k)$，那么它距离 $v_k$ 的距离为 $e_k - x$。
+
+如图绝对重心 $c$ 与一点 $i$ 的关系图：
+
 \begin{figure}[H]
     \centering
     \includegraphics{images/mdst-graph.png}
-    \caption{绝对重心求解 1（}
+    \caption{图的绝对中心与一点的位置关系\cite{oiwiki-dmst}}
     \label{fig:mdst-graph}
 \end{figure}
+
+那么 $d_{c,i} = \min\{w_i \times (d_{u_k, i} + x), w_i \times (d_{v,i} + e_k - x)\}$。
+
+随着 $c$ 从 $u_k$ 到 $v_k$ 的移动 $d_{c,i}$ 的变化如图可以画到一个平面直角坐标系上：
+
+\begin{figure}[H]
+	\centering
+	\includegraphics{images/mdst-plot1.png}
+	\caption{图的绝对中心变化的影响\cite{oiwiki-dmst}}
+	\label{fig:mdst-graph}
+\end{figure}
+
+然后显然可以发现图像会是两条斜率相同的一次函数所构成。
+
+接下来将对于每一个点 $i$ 都画像这样的图像就可以得到：
+
+\begin{figure}[H]
+	\centering
+	\includegraphics{images/mdst-plot2.png}
+	\caption{图的绝对中心变化的影响\cite{oiwiki-dmst}}
+	\label{fig:mdst-graph}
+\end{figure}
+
+这些折线交点中的最低点，横坐标就是图的绝对中心的位置。
+
+对于绝对中心在一个点上，那么就枚举一下那个节点，再用与其距离最远的节点更新一下就行了。
+
+对于每一条边，每一个点都这样做一下就可以了。
+
+总结一下过程：
+
+\begin{enumerate}
+    \item 使用最短路算法求出 $d_{i,j}$;
+    \item 求出 $rk_{i,j}$；
+    \item 对于绝对中心在点上更新答案；
+    \item 对于绝对中心在边上，枚举每一条边更新答案；
+\end{enumerate}
+
+如果使用堆优化的 Dijkstra 求解最短路、邻接表存图，时间复杂度为 $\Theta(n^2\log m + nm)$
 
 \subsection{问题二}
 
@@ -104,6 +151,9 @@ $d_{i,j}$   & 第 $i$ 个点和第 $j$ 个点最短路径长度 \\ \hline
 
 \section{模型评价}
 
+
+\bibliographystyle{plain}
+\bibliography{ref}
 \newpage
 
 %附录
