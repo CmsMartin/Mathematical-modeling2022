@@ -85,18 +85,19 @@ $s_i$       & 第 $i$ 个点的所有人到核酸检测点的距离和 \\ \hline
 
 \subsection{问题一}
 
+假设核酸检测点在边 $(u_k,v_k)$ 上，设其距 $u_k$ 的距离为 $x(x \in [0,e_k])$，那么它距离 $v_k$ 的距离为 $e_k - x$。对于一个节点 $i$，
+第 $i$ 个节点的人到核酸检测点的最短路程为 $\min\left\{d_{u_k,i}+x,d_{v_k,i}+e_k-x\right\}$。接下来我们将分别考虑两种评判标准进行求解。
+
 \subsubsection{方案一}
 
 使得每一个人到达核酸检测点的路程和最小。
 
-假设核酸检测点在边 $(u_k,v_k)$ 上，设其距 $u_k$ 的距离为 $x(x \in [0,e_k])$，那么它距离 $v_k$ 的距离为 $e_k - x$。
-
 对于点 $i$，点 $i$ 上的所有人到核酸检测点的路程和为 $s_i=w_i\cdot\min\left\{d_{u_k,i}+x,d_{v_k,i}+e_k-x\right\}$。我们可以
 把 $s_i$ 随 $x$ 的变化表示在平面直角坐标系上。
 
-我们发现当 $x=\frac{d_{v_k,i}+e_k-d_{u_k,i}}{2}$。
+% $x=\frac{d_{v_k,i}+e_k-d_{u_k,i}}{2}$ 是图象的转折点。
 
-显然可以发现图象一定是一条先升再降的折线或者是直线，因此一定是上凸的。由于每个 $s_i$ 关于 $x$ 是上凸的，所以总路程 $\sum_{i=1}^n s_i$ 也是上凸的。
+可以发现图象一定是一条先升再降的折线或者是直线，因此一定是上凸的。由于每个 $s_i$ 关于 $x$ 是上凸的，所以总路程 $\sum_{i=1}^n s_i$ 也是上凸的。
 因此 $\sum_{i=1}^n s_i$ 在区间 $[0,e_k]$ 上的最小值一定在 $x=0$ 或 $x=e_k$ 时取到，即核酸检测点一定在某个点上。
 
 以下是算法过程：
@@ -122,9 +123,9 @@ $s_i$       & 第 $i$ 个点的所有人到核酸检测点的距离和 \\ \hline
 
 \begin{figure}[H]
     \centering
-    \includegraphics{images/mdst-graph.png}
+    \includesvg{images/Single-1.svg}
     \caption{图的绝对中心与一点的位置关系\cite{oiwiki-dmst}}
-    \label{fig:mdst-graph}
+    \label{fig:Single-1}
 \end{figure}
 
 那么 $d_{c,i} = \min\left\{d_{u_k, i} + x, d_{v_k,i} + e_k - x\right\}$。
