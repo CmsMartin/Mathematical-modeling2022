@@ -368,16 +368,11 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
     \setlength{\mcm@lenB}{\textwidth-\mcm@lenB}
     % 不这样做右边难以对齐!
     \begin{center}
-        \zihao{3}{\textbf{数学建模课程论文}}\zihao{-4}\\\vskip1em
+        \zihao{3}{\textbf{基于图论模型的核酸检测点设置位置分析}}\zihao{-4}\\\vskip1em
         组员 1: \mcm@tokens@membera\\
         组员 2: \mcm@tokens@memberb\\
         组员 3: \mcm@tokens@memberc
     \end{center}
-    \textbf{人员分工：}
-    \begin{description}[itemindent=4em]
-        \item[唐铭泽] 模型设计、绘图、论文编写、排版
-        \item[罗浩宇] 模型设计、论文编写
-        \item[陈子轩] 资料收集、模型设计
     \end{description}
     
     % \mcm@commit@string@supervisorname\uline{\mbox{\hspace{1em}}\mcm@tokens@supervisor\hfill}\makebox[0.66em]{}\par
@@ -434,11 +429,11 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
 \newpage
 \null
 \setcounter{page}{1}
-{\centering \zihao{3}\bfseries \@title\par}
+% {\centering \zihao{3}\bfseries \@title\par}
 \vskip1ex
 \else
 \setcounter{page}{1}
-{\centering \zihao{3}\bfseries \@title\par}
+% {\centering \zihao{3}\bfseries \@title\par}
 \vskip1ex
 \fi
 }

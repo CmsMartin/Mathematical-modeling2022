@@ -6,7 +6,7 @@ const ll INF = 1e18;
 int N, M;
 ll G[510][510], Dist[510][510], Rank[510][510], W[510];
 
-void CenTer_Point(int &u, int &v, double &x) {
+void Center_Point(int &u, int &v, double &x) { //返回值为绝对中心在边 $(u,v)$，与 $u$ 的距离为 $x$
     for (int k = 1; k <= N; k++) {
         for (int i = 1; i <= N; i++) {
             for (int j = 1; j <= N; j++) {
@@ -54,6 +54,5 @@ void CenTer_Point(int &u, int &v, double &x) {
             }
         }
     }
-
     return;
 }
