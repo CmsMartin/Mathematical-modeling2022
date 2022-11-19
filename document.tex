@@ -67,7 +67,7 @@
 \textbf{对于问题二}：我们把问题一的结论进行推广，并针对两种目标提出相应的算法。
 
 \textbf{对于问题三}：针对目标一，我们先建立了整数规划模型，再提出了一种基于模拟退火的智能算法来求出近似最优解。
-针对目标二，我们先用二分法把原问题转化为判定性问题，再针对判定性问题建立了整数线性规划模型，并证明判定性问题是
+针对目标二，我们先用二分法把原问题转化为集合覆盖问题，再针对该问题建立了整数线性规划模型，并证明判定性问题是
 
 \keywords{图论\quad  最短路\quad  NP-Hard\quad 模拟退火\quad 整数规划\quad 动态规划}
 \end{abstract}
@@ -361,13 +361,13 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 
 先求解以下规划问题：
 
-\begin{equation*}
+\begin{align*}
     \min\sum\limits_{S \in \mathscr{A}} X_S\\
     \operatorname{s.t.}\begin{cases}
         \forall S \in \mathscr{A}, e \in [1,n],\sum_{S;e \in S} x_S \ge 1\\
         \forall S \in \mathscr{A}, X_S \in \{0,1\}
     \end{cases}
-\end{equation*}
+\end{align*}
 
 然后判断最优解是否小于等于 $k$，即可判断最长距离是否有可能小于等于阈值。
 
