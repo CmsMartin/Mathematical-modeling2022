@@ -259,7 +259,7 @@ $\textbf{状态压缩动态规划解法}$：
 
 $\textbf{近似算法}$：
 
-目前关于集合覆盖问题，仍然找不到一个有效的OPT算法，我们这里提出的是一种基于贪心策略的近似性算法。
+目前关于集合覆盖问题，仍然找不到一个有效的OPT算法，我们这里提出的是一种基于贪婪策略的近似性算法。
 
 算法过程为如下伪代码：
 
@@ -283,7 +283,7 @@ $\textbf{近似算法}$：
 
 性能分析：
 
-在贪心算法的每次迭代过程中，剩下元素OPT算法的 $cost$ 必定小于等于原问题OPT算法的 $cost$，那么有：$\frac{|A|}{|[1,n]\setminus C|}$。
+在贪婪算法的每次迭代过程中，剩下元素OPT算法的 $cost$ 必定小于等于原问题OPT算法的 $cost$，即为小于等于 $\frac{|A|}{|[1,n]\setminus C|}$。
 
 设最优解的答案为 $\mathscr{S}$。
 
@@ -321,7 +321,7 @@ const ll INF = 1e18;
 int N, M;
 ll G[510][510], Dist[510][510], Rank[510][510], W[510];
 
-void Center_Point(int &u, int &v, double &x) { //返回值为绝对中心在边 $(u,v)$，与 $u$ 的距离为 $x$
+void Center_Point(int &u, int &v, double &x) { //返回值为绝对中心在边 (u,v)，与 u 的距离为 x
     for (int k = 1; k <= N; k++) {
         for (int i = 1; i <= N; i++) {
             for (int j = 1; j <= N; j++) {
