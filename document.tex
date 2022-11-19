@@ -47,11 +47,6 @@
 \usepackage{url}
 \title{基于图论模型的核酸检测点设置位置分析}
 \tihao{B}
-\baominghao{114514}
-\schoolname{天元公学}
-\membera{陈铭硕}
-\memberb{唐铭泽}
-\memberc{尹贝尔}
 \date{\today}
 \usepackage{footnote}
 
@@ -65,7 +60,7 @@
 
 \begin{abstract}
 
-\keywords{疫情防控\quad  图论\quad   图的绝对重心\quad  最短路\quad  NP-Hard}
+\keywords{图论\quad  最短路\quad  NP-Hard\quad 模拟退火\quad 整数规划\quad 动态规划}
 \end{abstract}
 
 %目录
@@ -221,11 +216,30 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 
 可以发现，问题一方案一的结论可以推广到多个核酸检测点。
 
+设第一个核酸检测点在边 $(u_a,v_a)$ 上，到 $u_a$ 的距离为 $x_1$，第二个核酸检测点在边 $(u_b,v_b)$ 上，到 $u_b$ 的距离为 $x_2$。则此处 $D$ 为 $x_1$ 和 $x_2$ 的函数。
+
+我们发现同一个节点的人选择去同一个核酸检测点检测肯定不劣。于是假设节点集合 $S$ 中的人都去第一个核酸检测点采样，$V\setminus S$ 中的人都去第二个核酸检测点采样。令 $D_1(x_1)=\sum_{i\in S}s_i,D_2(x_2)=\sum_{i\in V\setminus S}s_i$。因为 $S\cup (V\setminus S)=V$ 且 $S\cap (V\setminus S)=\emptyset$，所以 $D(x_1,x_2)=D_1(x_1)+D_2(x_2)$。
+
+同问题一可证 $D_1$ 关于 $x_1$ 上凸，$D_2$ 关于 $x_2$ 上凸。因此：
+
+\begin{equation*}
+    D(x_1,x_2)&=D_1(x_1)+D_2(x_2)\\
+    &\ge \min\left\{D_1(0),D_1(e_a)\right\}+\min\left\{D_2(0),D_2(e_b)\right\}
+\end{equation*}
+
+即两个核酸检测点设置在边上时并不能比设在边的端点上更优。该证明同样可以推广到更多核酸检测点的情况。
+
 那只需要枚举两个核酸点，暴力计算取最小值即可。
 
 时间复杂度 $\Theta(n^3)$
 
 \subsubsection{方案二}
+
+这个问题不易求解，不妨钦定核酸检测点不会出现在路上（对于一个小区，设置在路上可能会影响交通，所以对最优性影响不大）。
+
+那么我们只需要同方案一，核酸点，暴力计算取最小值即可。
+
+时间复杂度 $\Theta(n^3)$。
 
 \subsection{问题三}
 
@@ -243,12 +257,12 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 
 \begin{equation*}
     x_i=\begin{cases}
-    1 & i \text{ 设立核酸检测点}\\
+    1 & i \text{设立核酸检测点}\\
     0 & \text{其他}
     \end{cases}
 \end{equation*}
 
-则可以如下建立规划模型
+则可以如下建立规划模型：
 
 \begin{align*}
     \min &\sum_{i=1}^n \left(w_i \min_{x_j=1} d_{i,j}\right)\\
@@ -257,7 +271,7 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 
 \paragraph{模拟退火解法}
 
-这个问题难以找到复杂度可以接受的精确算法。于是考虑近似算法。在此，我们采用模拟退火算法进行求解。
+这个问题笔者未找到复杂度可以接受的精确算法。于是考虑近似算法。在此，我们采用模拟退火算法进行求解。
 
 算法过程如下：
 
@@ -312,7 +326,7 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 
 \subsubsection{方案二}
 
-问题转化为给定一张无向图，在其中选择 $k$ 个点，使得每个点距离其最近的核酸检测点距离最大值最小，这个问题不易求解，不妨钦定核酸检测点不会出现在路上（对于一个小区，设置在路上可能会影响交通，所以对最优性影响不大）。
+问题转化为给定一张无向图，在其中选择 $k$ 个点，使得每个点距离其最近的核酸检测点距离最大值最小，同问题二方案二，不妨钦定核酸检测点在无向图的点上。
 
 发现问题具有单调性，如果每个点距离最近的核酸检测点距离最大值为 $x$ 的时候可行，那么距离最大值大于等于 $x$ 的时候也可行，这一点是显然的。
 
@@ -390,7 +404,7 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 
 我们每次选取的都是 $|A\setminus C|$ 最大的集合 $A_i$，即每次新添加的集合 $A$ 的覆盖率都是最大的，从而保证局部最优。
 
-性能分析：
+\paragraph{性能分析}：
 
 在贪婪算法的每次迭代过程中，剩下元素OPT算法的 $cost$ 必定小于等于原问题OPT算法的 $cost$，即为小于等于 $\frac{|A|}{|[1,n]\setminus C|}$。
 
@@ -404,7 +418,7 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 
 所以有 $\sum \operatorname{price}(x) \le (\sum_{i=1}\frac{1}{i}) \cdot \mathscr{S} = H_n \cdot \mathscr{S}$。
 
-不可逼近性结果表明，如上的贪婪算法本质上是集合覆盖到低阶项的最佳多项式时间逼近算法（Dinur\&Steurer, 2013）通过证明它不能近似于最佳不可近似性来证明最优的不可近似性 ${\displaystyle {\bigl (}1-o(1){\bigr )}\cdot \ln {n}}\text{除非} P{\displaystyle =}NP.)$，在合理的复杂性假设下。对贪婪算法的更严格的分析表明，近似比正好 ${\displaystyle \ln {n}-\ln {\ln {n}}+\Theta(1)}$。\upcite{greedy-algorithm-for-set-cover}
+不可逼近性结果表明，如上的贪婪算法本质上是集合覆盖到低阶项的最佳多项式时间近似算法（Dinur\&Steurer, 2013）通过证明它不能近似于最佳不可近似性来证明最优的不可近似性 ${\displaystyle {\bigl (}1-o(1){\bigr )}\cdot \ln {n}}\text{除非} P{\displaystyle =}NP.)$，在合理的复杂性假设下。对贪婪算法的更严格的分析表明，近似比正好 ${\displaystyle \ln {n}-\ln {\ln {n}}+\Theta(1)}$。\upcite{greedy-algorithm-for-set-cover}
 
 对于一个小区，实测答案较为优秀，如下图，我们保证每个点的点权为 $1$（因为这样方便看出优劣），答案为红色的点 $k=10$。
 
