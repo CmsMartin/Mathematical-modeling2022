@@ -27,12 +27,12 @@ void Center_Point(int &u, int &v, double &x) {  // 返回值为绝对中心在�
     }
 
     double Ans = 1e18;
-
+    for (int i = 1; i <= N; i++) Ans = min(Ans, Dist[i][Rank[i][N]] * 2.00);
     for (int i = 1; i <= N; i++) {
         for (int j = 1; j <= N; j++) {
             if (i == j || G[i][j] == INF) continue;
             int p = Rank[i][N];
-            ll Temp = W[i] * Dist[i][p];
+            ll Temp = Dist[i][p];
             if (Ans > Temp) {
                 Ans = Temp;
                 u = i;
@@ -42,7 +42,7 @@ void Center_Point(int &u, int &v, double &x) {  // 返回值为绝对中心在�
             for (int k = N - 1; k >= 1; k--) {
                 int t = Rank[i][k];
                 if (Dist[j][t] > Dist[j][p]) {
-                    Temp = W[i] * (Dist[i][t] + Dist[j][p] + G[i][j]);
+                    Temp = (Dist[i][t] + Dist[j][p] + G[i][j]);
                     if (Ans > Temp) {
                         Ans = Temp;
                         u = i;

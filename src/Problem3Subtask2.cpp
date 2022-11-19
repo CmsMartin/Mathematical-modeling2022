@@ -6,16 +6,21 @@ int N, M, K;
 bitset<MAXN> A[MAXN], U;
 long long W[MAXN];
 long long G[MAXN][MAXN];
+int Id[MAXN];
 bitset<MAXN> Ans;
 
 bool Check(long long x) {
+    for (int i = 1; i <= N; i++) {
+        Id[i] = i;
+    }
     vector<int> S;
     bitset<MAXN> C;
     for (int i = 1; i <= N; i++) A[i].reset();
+    random_shuffle(Id + 1, Id + 1 + N);
     for (int i = 1; i <= N; i++) {
         for (int j = 1; j <= N; j++) {
-            if (W[i] * G[i][j] <= x) {
-                A[i][j] = true;
+            if (W[Id[i]] * G[Id[i]][j] <= x) {
+                A[Id[i]][j] = true;
             }
         }
     }
@@ -24,12 +29,12 @@ bool Check(long long x) {
         for (int i = 1; i <= N; i++) {
             int x = 0;
             for (int j = 1; j <= N; j++) {
-                if (A[i][j] == 1 && C[j] == 0) {
+                if (A[Id[i]][j] == 1 && C[j] == 0) {
                     x++;
                 }
             }
             if (x > Max.first) {
-                Max = {x, i};
+                Max = {x, Id[i]};
             }
         }
         C = C | A[Max.second];
@@ -42,6 +47,7 @@ bool Check(long long x) {
 }
 
 int main() {
+    srand(time(0)); 
     scanf("%d %d %d", &N, &M, &K);
     memset(G, 0x3f, sizeof G);
     for (int i = 1; i <= N; i++) {
@@ -49,6 +55,7 @@ int main() {
         W[i]++;
         G[i][i] = 0;
         U[i] = true;
+        Id[i] = i;
     }
     for (int i = 1; i <= M; i++) {
         static int u, v, w;

@@ -26,6 +26,4 @@ int Solve() {  // 返回核酸检测点位置
     }
 
     return ans;
-
-    return;
 }
