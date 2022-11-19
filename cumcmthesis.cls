@@ -349,11 +349,11 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
   \global\let\and\relax
 }
 \def\@maketitle{%
-  \newpage
-  \if@mcm@preface
-  \null
+%   \newpage
+%   \if@mcm@preface
+%   \null
  % 承诺书
- \vskip2ex
+%  \vskip2ex
   \thispagestyle{empty}
 %   {\zihao{4}\noindent\mcm@commit@string@headname\\[-8pt]
 %   \noindent\rule[5pt]{\textwidth-1.34em}{.5pt}\par}
@@ -362,18 +362,23 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
 %     {\vskip1ex\zihao{3}\bfseries\songti \mcm@commit@string@titleb \par}
 %   \end{center}
     % {\zihao{-4} \mcm@commit@string@contents \par}
-    {
-    \newlength{\mcm@lenB}
-    \settowidth{\mcm@lenB}{\mcm@commit@string@membername\mbox{\hspace{1em}}1.}
-    \setlength{\mcm@lenB}{\textwidth-\mcm@lenB}
+    % {
+    % \newlength{\mcm@lenB}
+    % \settowidth{\mcm@lenB}{\mcm@commit@string@membername\mbox{\hspace{1em}}1.}
+    % \setlength{\mcm@lenB}{\textwidth-\mcm@lenB}
     % 不这样做右边难以对齐!
-    \begin{center}
-        \zihao{3}{\textbf{基于图论模型的核酸检测点设置位置分析}}\zihao{-4}\\\vskip1em
-        组员 1: \mcm@tokens@membera\\
-        组员 2: \mcm@tokens@memberb\\
-        组员 3: \mcm@tokens@memberc
-    \end{center}
-    \end{description}
+    % \begin{center}
+    %     \zihao{3}{\textbf{数学建模课程论文}}\zihao{-4}\\\vskip1em
+    %     组员 1: \mcm@tokens@membera\\
+    %     组员 2: \mcm@tokens@memberb\\
+    %     组员 3: \mcm@tokens@memberc
+    % \end{center}
+    % \textbf{人员分工：}
+    % \begin{description}[itemindent=4em]
+    %     \item[唐铭泽] 模型设计、绘图、论文编写、排版
+    %     \item[罗浩宇] 模型设计、论文编写
+    %     \item[陈子轩] 资料收集、模型设计
+    % \end{description}
     
     % \mcm@commit@string@supervisorname\uline{\mbox{\hspace{1em}}\mcm@tokens@supervisor\hfill}\makebox[0.66em]{}\par
     % % \hspace{0.1cm} （{\kaishu 指导教师签名意味着对参赛队的行为和论文的真实性负责}）
@@ -385,13 +390,13 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
     % \mcm@commit@string@year\uline{\hfill\mcm@tokens@monthinput\hfill}\mcm@commit@string@month%
     % \uline{\hfill\mcm@tokens@dayinput\hfill}\mcm@commit@string@day\makebox[1em]{}\par
         
-    }
-    \vskip1ex
-	\vfill
-	\null
+    % }
+    % \vskip1ex
+% 	\vfill
+% 	\null
 % 编号专用页
-	\else
-	\fi
+% 	\else
+% 	\fi
 	\makeothertitle
 	}
 
@@ -400,23 +405,23 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
   \if@mcm@preface
   \par
 \null
-\thispagestyle{empty}
+% \thispagestyle{empty}
 {%
 % \zihao{4}
 % \vskip3em
 % \hspace*{2em}\mcm@numberpage@string@appraiselog
 % \par
-\newlength{\mcm@lenC}
-\setlength{\mcm@lenC}{\textwidth-8.72em}
-\setlength{\mcm@lenC}{\mcm@lenC/6}
-\newlength{\mcm@lenD}
-% \settoheight{\mcm@lenD}{\mcm@numberpage@string@reviewer}
-\setlength{\mcm@lenD}{\mcm@lenD+2em}
-\newlength{\mcm@lenF}
-% \settoheight{\mcm@lenF}{\mcm@numberpage@string@remarks}
-\setlength{\mcm@lenF}{\mcm@lenF+2em}
-\newcolumntype{P}{@{}p{\mcm@lenC}@{}}
-\hspace*{1.5em}
+% \newlength{\mcm@lenC}
+% \setlength{\mcm@lenC}{\textwidth-8.72em}
+% \setlength{\mcm@lenC}{\mcm@lenC/6}
+% \newlength{\mcm@lenD}
+% % \settoheight{\mcm@lenD}{\mcm@numberpage@string@reviewer}
+% \setlength{\mcm@lenD}{\mcm@lenD+2em}
+% \newlength{\mcm@lenF}
+% % \settoheight{\mcm@lenF}{\mcm@numberpage@string@remarks}
+% \setlength{\mcm@lenF}{\mcm@lenF+2em}
+% \newcolumntype{P}{@{}p{\mcm@lenC}@{}}
+% \hspace*{1.5em}
 % \begin{tabular}{|!{\hspace{4pt}}c!{\hspace{4pt}}|*{6}{P|}}
 %  \hline
 %  \rule{0pt}{\mcm@lenD}\raisebox{0.6em}[0pt][0pt]{\mcm@numberpage@string@reviewer} & & & & & &  \\\cline{1-7}
@@ -426,14 +431,14 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
 }
 
 \null
-\newpage
+% \newpage
 \null
 \setcounter{page}{1}
-% {\centering \zihao{3}\bfseries \@title\par}
+{\centering \zihao{3}\bfseries \@title\par}
 \vskip1ex
 \else
 \setcounter{page}{1}
-% {\centering \zihao{3}\bfseries \@title\par}
+{\centering \zihao{3}\bfseries \@title\par}
 \vskip1ex
 \fi
 }
