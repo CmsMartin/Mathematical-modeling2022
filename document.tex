@@ -60,6 +60,11 @@
 
 \begin{abstract}
 
+合理地选择核酸检测点的位置可以很大程度上方便居民的核酸检测。本文将小区结构抽象为图结构，对不同的小区中核酸检测点的规划进行了研究，分析核酸检测点位置与人群流动的关系，考虑了多种评价标准与约束条件，对于使总路程和最长路程分别最小的目标分别建立了图论模型。
+
+\textbf{对于问题一}：针对两种评价标准，我们通过枚举核酸检测点所在的边，将原问题转化为单变量优化问题，经过分析，得出结论：使总路程最小时，核酸检测点一定在点上；使最大路程最小时，核酸检测点在图的绝对中心上。
+
+
 \keywords{图论\quad  最短路\quad  NP-Hard\quad 模拟退火\quad 整数规划\quad 动态规划}
 \end{abstract}
 
@@ -222,10 +227,11 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 
 同问题一可证 $D_1$ 关于 $x_1$ 上凸，$D_2$ 关于 $x_2$ 上凸。因此：
 
-\begin{equation*}
+\begin{align*}
     D(x_1,x_2)&=D_1(x_1)+D_2(x_2)\\
-    &\ge \min\left\{D_1(0),D_1(e_a)\right\}+\min\left\{D_2(0),D_2(e_b)\right\}
-\end{equation*}
+    &\ge \min\left\{D_1(0),D_1(e_a)\right\}+\min\left\{D_2(0),D_2(e_b)\right\}\\
+    &=\min\left\{D(0,0),D(0,e_b),D(e_a,0),D(e_a,e_b)\right\}
+\end{align*}\par
 
 即两个核酸检测点设置在边上时并不能比设在边的端点上更优。该证明同样可以推广到更多核酸检测点的情况。
 
@@ -349,16 +355,26 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 
 \paragraph{整数线性规划解法}
 
-限制：
+先求解以下规划问题：
 
-\begin{equation*}
-\begin{cases}
-\forall S \in \mathscr{A}, e \in [1,n],\sum_{S;e \in S} x_S \ge 1\\
-\forall S \in \mathscr{A}, X_S \in \{0,1\}
-\end{cases}
-\end{equation*}
+\begin{align*}
+    \min&\sum\limits_{S \in \mathscr{A}} X_S\\
+    \operatorname{s.t.}&\forall S \in \mathscr{A}, e \in [1,n],\sum_{S;e \in S} x_S \ge 1\\
+    &\forall S \in \mathscr{A}, X_S \in \{0,1\}
+\end{align*}
 
-然后我们需要最小化 $\sum\limits_{S \in \mathscr{A}} X_S$。
+然后判断最优解是否小于等于 $k$，即可判断最长距离是否有可能小于等于阈值。
+
+% 限制：
+
+% \begin{equation*}
+% \begin{cases}
+% \forall S \in \mathscr{A}, e \in [1,n],\sum_{S;e \in S} x_S \ge 1\\
+% \forall S \in \mathscr{A}, X_S \in \{0,1\}
+% \end{cases}
+% \end{equation*}
+
+% 然后我们需要最小化 $\sum\limits_{S \in \mathscr{A}} X_S$。
 
 \paragraph{状态压缩动态规划解法}
 
