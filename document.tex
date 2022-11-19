@@ -11,6 +11,26 @@
 \usepackage{algorithmicx}
 \usepackage{algpseudocode}
 \usepackage{amsmath}
+\usepackage{xcolor}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{ %
+	backgroundcolor=\color{white},      % choose the background color
+	basicstyle=\footnotesize\ttfamily,  % size of fonts used for the code
+	columns=fullflexible,
+	tabsize=4,
+	breaklines=true,               % automatic line breaking only at whitespace
+	captionpos=b,                  % sets the caption-position to bottom
+	commentstyle=\color{mygreen},  % comment style
+	escapeinside={\%*}{*)},        % if you want to add LaTeX within your code
+	keywordstyle=\color{blue},     % keyword style
+	stringstyle=\color{mymauve}\ttfamily,  % string literal style
+	frame=single,
+	rulesepcolor=\color{red!20!green!20!blue!20},
+	% identifierstyle=\color{red},
+	language=c,
+}
 % \documentclass[withoutpreface,bwprint]{cumcmthesis} %去掉封面与编号页
 
 \usepackage{url}
@@ -21,7 +41,6 @@
 \membera{陈铭硕}
 \memberb{唐铭泽}
 \memberc{尹贝尔}
-\supervisor{老师}
 \date{\today}
 \usepackage{footnote}
 
@@ -35,7 +54,7 @@
 
 \begin{abstract}
 
-\keywords{疫情防控\quad  图论\quad   图的绝对重心\quad  最短路}
+\keywords{疫情防控\quad  图论\quad   图的绝对重心\quad  最短路\quad  NP-Hard}
 \end{abstract}
 
 %目录
@@ -44,7 +63,7 @@
 \newpage
 \section{问题重述}
 
-\subsection{问题的提出}
+2019年冬，新冠病毒疫情席卷全球，对人类的工作，生活等方方面面产生了极大的影响。为了发现病毒携带者，我国使用核酸检测作为发现病毒携带者的的重要手段，执行动态清零政策，进行常态化核酸检测，保障人民安全。核酸检测往往需要大量核酸检测点来支持其采样。为了使居民小区中的核酸检测点设置位置达到最优，方便居民的核酸采样。
 
 \section{问题分析}
 
@@ -54,18 +73,11 @@
 把道路的交叉点等看作没有人居住的单元。核酸检测点可以设在单元里，也可以设在道路上。于是我们可以把居民小区抽象为一张连通无向图，以单元为点，点权为居住人数，边
 权为边的长度，把核酸检测点的规划转化成图论问题进行求解。
 
-\subsection{问题一分析}
-
 定义图上两点的花费为两点的最短路径长度乘上起始点的点权。
 
 建立核酸检测点位置要使居民总体方便，那么建立核酸检测点有两种策略：使得每个人到达核酸检测点的路程和最小或到达核酸检测点的最大的路程最短；并且需要考虑建立的位置是否会给居民的正常生活造成影响。
 
-\subsection{问题二分析}
-
-\subsection{问题三分析}
-
 \section{模型假设}
-
 
 
 \section{符号说明}
@@ -285,6 +297,7 @@ $\textbf{近似算法}$：
 
 不可逼近性结果表明，贪婪算法本质上是集合覆盖到低阶项的最佳多项式时间逼近算法（Dinur&Steurer（2013）通过证明它不能近似于最佳不可近似性来证明最优的不可近似性 ${\displaystyle {\bigl (}1-o(1){\bigr )}\cdot \ln {n}}\text{除非} P{\displaystyle =}NP.)$，在合理的复杂性假设下。对贪婪算法的更严格的分析表明，近似比正好 ${\displaystyle \ln {n}-\ln {\ln {n}}+\Theta(1)}$\cite{greedy-algorithm-for-set-cover}。
 
+对于一个小区，实测答案较为优秀。
 
 \section{模型评价}
 
@@ -392,6 +405,93 @@ int Solve() { // 返回核酸检测点位置
     return ans;
     
     return;
+}
+\end{lstlisting}
+
+\section{问题三方案二代码}
+
+\begin{lstlisting}
+#include <bits/stdc++.h>
+using namespace std;
+const int MAXN = 510;
+
+int N, M, K;
+bitset<MAXN> A[MAXN], U;
+long long W[MAXN];
+long long G[MAXN][MAXN];
+bitset<MAXN> Ans;
+
+bool Check(long long x) {
+	vector<int> S;
+	bitset<MAXN> C;
+	for (int i = 1; i <= N; i++) A[i].reset();
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j <= N; j++) {
+			if (W[i] * G[i][j] <= x) {
+				A[i][j] = true;
+			}
+		}
+	}
+	while (C != U) {
+		pair<int, int> Max = {0, 0};
+		for (int i = 1; i <= N; i++) {
+			int x = 0;
+			for (int j = 1; j <= N; j++) {
+				if (A[i][j] == 1 && C[j] == 0) {
+					x++;
+				}
+			}
+			if (x > Max.first) {
+				Max = {x, i};
+			}
+		}
+		C = C | A[Max.second];
+		S.push_back(Max.second);
+		if (S.size() > K) return false;
+	}
+	Ans.reset();
+	for (int i : S) Ans[i] = true;
+	return true;
+}
+
+int main() {
+	scanf("%d %d %d" ,&N ,&M ,&K);
+	memset(G, 0x3f, sizeof G);
+	for (int i = 1; i <= N; i++) {
+		scanf("%d" ,&W[i]);
+		G[i][i] = 0;
+		U[i] = true;
+	}
+	for (int i = 1; i <= M; i++) {
+		static int u, v, w;
+		scanf("%d %d %d" ,&u ,&v ,&w);
+		G[u][v] = w;
+		G[v][w] = w;
+	}
+	for (int k = 1; k <= N; k++) {
+		for (int i = 1; i <= N; i++) {
+			for (int j = 1; j <= N; j++) {
+				G[i][j] = min(G[i][k] + G[k][j], G[i][j]);
+			}
+		}
+	}
+	long long l = 1, r = 0;
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j <= N; j++) {
+			r = max(r, W[i] * G[i][j]);
+		}
+	}
+	while (l <= r) {
+		long long mid = l + r >> 1;
+		if (Check(mid)) r = mid - 1;
+		else l = mid + 1; 
+	}
+	for (int i = 1; i <= N; i++) {
+		if (Ans[i]) {
+			cout << i << " ";
+		}
+	}
+	return 0;
 }
 \end{lstlisting}
 
