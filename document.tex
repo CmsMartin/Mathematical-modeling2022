@@ -101,10 +101,6 @@
 
 建立核酸检测点位置要使居民总体方便，那么建立核酸检测点有两种方案：使得每个人到达核酸检测点的路程和最小或到达核酸检测点的最大的路程最短；并且需要考虑建立的位置是否会给居民的正常生活造成影响。
 
-\subsection{问题一分析}
-
-对于上面提到的第一种方案，我们可以证明一定存在一个最优解，使核酸检测点在一个点上。于是我们可以直接枚举核酸检测点在哪个点上，并选择使路程和最小的点，从而构造出一种最优解。
-
 \section{模型假设}
 
 \begin{enumerate}
@@ -237,11 +233,31 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 
 建立 $k$ 个核酸检测点，使得每一个人到达核酸检测点的路程和最小。
 
-上文已经证明了采用方案一时核酸检测点一定建在图的节点上。
+上文已经证明了采用方案一时核酸检测点一定建在图的节点上。于是我们可以提出如下算法。
 
 % 建立优化模型
 
-这个问题难以找到复杂度可以接受的精确算法，于是考虑近似算法。在此，我们采用模拟退火算法进行求解。
+\paragraph{整数规划解法}
+
+设决策变量为 $x_i$，满足
+
+\begin{equation*}
+    x_i=\begin{cases}
+    1 & i \text{ 设立核酸检测点}\\
+    0 & \text{其他}
+    \end{cases}
+\end{equation*}
+
+则可以如下建立规划模型
+
+\begin{align*}
+    \min &\sum_{i=1}^n \left(w_i \min_{x_j=1} d_{i,j}\right)\\
+    \operatorname{s.t.} &\sum_{i=1}^n x_i=k
+\end{align*}
+
+\paragraph{模拟退火解法}
+
+这个问题难以找到复杂度可以接受的精确算法。于是考虑近似算法。在此，我们采用模拟退火算法进行求解。
 
 算法过程如下：
 
@@ -283,6 +299,15 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
     \end{tikzpicture}
     \caption{问题三方案一流程图}
     \label{fig:3-1-fig}
+\end{figure}
+
+对于下面的小区，模拟退火能求出一个非常近似最优解的近似解，如下图。
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.80\textwidth]{images/Problem3Subtask1.png}
+	\caption{模拟退火求得的近似最优解}
+	\label{fig:P3T1-1}
 \end{figure}
 
 \subsubsection{方案二}
