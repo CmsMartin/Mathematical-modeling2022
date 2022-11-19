@@ -363,8 +363,6 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 给定 $n$ 个集合，第 $i$ 个集合记作 $A_i(\forall j \in A_i, j 
 \in [1,n])$，从其中选出 $k$ 个集合构成集合 $\mathscr{A}$，试判断是否存在一种选法，使得 $\bigcup\limits_{S \in \mathscr{A}} S = [1,n]$。
 
-发现这个问题可以被经典 NP-C 问题 SAT 多项式规约，所以它是一个 NP-Hard 问题。
-
 经查证，这是一个经典 NP-Hard 问题，集合覆盖问题（Set cover problem,SCP）\upcite{wikipedia-SCP}，故精确解只能在非多项式解法中得到，接下来会给出其三种解法，分别为 ILP（整数线性规划），状态压缩动态规划和其近似算法（采用 greedy 算法实现）。
 
 \paragraph{整数线性规划解法}
