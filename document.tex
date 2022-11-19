@@ -12,6 +12,17 @@
 \usepackage{algpseudocode}
 \usepackage{amsmath}
 \usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{dcolumn}
+\usepackage[sort&compress]{gbt7714}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width = 2cm, minimum height=1cm,text centered, draw = black]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=2cm, minimum height=1cm, text centered, draw=black]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black]
+\tikzstyle{decision} = [diamond, aspect = 3, text centered, draw=black]
+\tikzstyle{arrow} = [->,>=stealth]
+
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
@@ -29,7 +40,7 @@
 	frame=single,
 	rulesepcolor=\color{red!20!green!20!blue!20},
 	% identifierstyle=\color{red},
-	language=c,
+	language=C++,
 }
 % \documentclass[withoutpreface,bwprint]{cumcmthesis} %去掉封面与编号页
 
@@ -63,37 +74,62 @@
 \newpage
 \section{问题重述}
 
-2019年冬，新冠病毒疫情席卷全球，对人类的工作，生活等方方面面产生了极大的影响。为了发现病毒携带者，我国使用核酸检测作为发现病毒携带者的的重要手段，执行动态清零政策，进行常态化核酸检测，保障人民安全。核酸检测往往需要大量核酸检测点来支持其采样。为了使居民小区中的核酸检测点设置位置达到最优，方便居民的核酸采样。
+\subsection{问题背景}
+
+% 2019年冬，新冠病毒疫情席卷全球，对人类的工作，生活等方方面面产生了极大的影响。为了发现病毒携带者，我国使用核酸检测作为发现病毒携带者的的重要手段，执行动态清零政策，进行常态化核酸检测，保障人民安全。核酸检测往往需要大量核酸检测点来支持其采样。为了使居民小区中的核酸检测点设置位置达到最优，方便居民的核酸采样。
+
+% 这也是 bear 写的罢
+核酸检测是一种重要且有效的防疫手段。为了保障我国人民群众的生命安全，本着生命至上、人民至上的宗旨，我国采取了动态清零政策进行疫情防控，在有疫情风险的区域进行常态化核酸检测。在核酸检测常态化的背景下，为了方便居民的核酸检测，防疫部门应当科学合理地选择核酸检测点的位置。而由于小区结构的不同，针对不同类型的小区，选择核酸检测点位置的方法是不同的。我们需要找到一系列方法来求出核酸检测点的最优位置。
+
+\subsection{问题提出}
+
+对于不同类型的小区，回答以下问题：
+
+\textbf{问题一}：要求只设立一个检测点，求核酸检测点的最佳位置。
+
+\textbf{问题二}：要求设立两个检测点，求核酸检测点的最佳位置。
+
+\textbf{问题三}：允许设立多个检测点，规划核酸检测点的设置方案。
 
 \section{问题分析}
 
 \subsection{总体分析}
 
-一个居民小区通常由一些单元与道路组成。每个单元都有一定数量的人居住，每条道路都有一定的长度。由于是一个小区，任意两个单元可以通过道路相互到达。此外，我们可以
-把道路的交叉点等看作没有人居住的单元。核酸检测点可以设在单元里，也可以设在道路上。于是我们可以把居民小区抽象为一张连通无向图，以单元为点，点权为居住人数，边
-权为边的长度，把核酸检测点的规划转化成图论问题进行求解。
+一个居民小区通常由一些单元与道路组成。每个单元都有一定数量的人居住，每条道路都有一定的长度。此外，我们可以把道路的交叉点与空地等看作没有人居住的单元。核酸检测点可以设在单元里，也可以设在道路上。于是我们可以把居民小区抽象为一张连通无向图，以单元为点，点权为居住人数，边权为边的长度，把核酸检测点的规划转化成图论问题进行求解。
 
 定义图上两点的花费为两点的最短路径长度乘上起始点的点权。
 
-建立核酸检测点位置要使居民总体方便，那么建立核酸检测点有两种策略：使得每个人到达核酸检测点的路程和最小或到达核酸检测点的最大的路程最短；并且需要考虑建立的位置是否会给居民的正常生活造成影响。
+建立核酸检测点位置要使居民总体方便，那么建立核酸检测点有两种方案：使得每个人到达核酸检测点的路程和最小或到达核酸检测点的最大的路程最短；并且需要考虑建立的位置是否会给居民的正常生活造成影响。
+
+\subsection{问题一分析}
+
+对于上面提到的第一种方案，我们可以证明一定存在一个最优解，使核酸检测点在一个点上。于是我们可以直接枚举核酸检测点在哪个点上，并选择使路程和最小的点，从而构造出一种最优解。
 
 \section{模型假设}
 
+\begin{enumerate}
+    \item 任意两个单元可以通过道路相互到达，即图连通；
+    \item 核酸检测点只能设在点上或者边上；
+    \item 每一个人都会选择去最近的核酸检测点采样；
+    \item 每一个人移动的速度相同；
+    \item 不考虑道路堵塞与核酸检测点排队。
+\end{enumerate}
 
 \section{符号说明}
 \begin{center}
 \begin{savenotes}
 \begin{tabular}{cc}
-\hline
-\makebox[0.3\textwidth][c]{符号}	&  \makebox[0.4\textwidth][c]{意义} \\ \hline
-$n$         & 图的点数 \\ \hline
-$m$         & 图的边数 \\ \hline
-$w_i$	    & 第 $i$ 个点的点权 \\ \hline
-$e_i$	    & 第 $i$ 条边的边权 \\ \hline
-$u_i$       & 第 $i$ 条边的起点 \\ \hline
-$v_i$       & 第 $i$ 条边的终点 \\ \hline
-$d_{i,j}$   & 第 $i$ 个点和第 $j$ 个点最短路径长度 \\ \hline
-$s_i$       & 第 $i$ 个点的所有人到核酸检测点的距离和 \\ \hline
+\toprule
+\makebox[0.3\textwidth][c]{符号}	&  \makebox[0.4\textwidth][c]{意义} \\ \midrule
+$n$         & 图的点数 \\
+$m$         & 图的边数 \\
+$w_i$	    & 第 $i$ 个点的点权 \\
+$e_i$	    & 第 $i$ 条边的边权 \\
+$u_i$       & 第 $i$ 条边的起点 \\
+$v_i$       & 第 $i$ 条边的终点 \\
+$d_{i,j}$   & 第 $i$ 个点和第 $j$ 个点最短路径长度 \\
+$s_i$       & 第 $i$ 个点的所有人到核酸检测点的距离和 \\
+$D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 \end{tabular}
 \end{savenotes}
 \end{center}
@@ -104,6 +140,13 @@ $s_i$       & 第 $i$ 个点的所有人到核酸检测点的距离和 \\ \hline
 
 假设核酸检测点在边 $(u_k,v_k)$ 上，设其距 $u_k$ 的距离为 $x(x \in [0,e_k])$，那么它距离 $v_k$ 的距离为 $e_k - x$。对于一个节点 $i$，
 第 $i$ 个节点的人到核酸检测点的最短路程为 $\min\left\{d_{u_k,i}+x,d_{v_k,i}+e_k-x\right\}$。接下来我们将分别考虑两种评判标准进行求解。
+
+\begin{figure}[H]
+    \centering
+    \includesvg{images/Single-1.svg}
+    \caption{核酸检测点与一点的位置关系\upcite{oiwiki-mdst}}
+    \label{fig:Single-1}
+\end{figure}
 
 \subsubsection{方案一}
 
@@ -136,15 +179,6 @@ $s_i$       & 第 $i$ 个点的所有人到核酸检测点的距离和 \\ \hline
 
 假设图的绝对重心在边上，枚举每一条边 $(u_k,v_k)$，钦定图的绝对重心 $c$ 在这一条边上，假设其距 $u_k$ 的距离为 $x(0 \le x \le e_k)$，那么它距离 $v_k$ 的距离为 $e_k - x$。
 
-如图绝对重心 $c$ 与一点 $i$ 的关系图：
-
-\begin{figure}[H]
-    \centering
-    \includesvg{images/Single-1.svg}
-    \caption{图的绝对中心与一点的位置关系\cite{oiwiki-dmst}}
-    \label{fig:Single-1}
-\end{figure}
-
 那么 $d_{c,i} = \min\left\{d_{u_k, i} + x, d_{v_k,i} + e_k - x\right\}$。
 
 随着 $c$ 从 $u_k$ 到 $v_k$ 的移动 $d_{c,i}$ 的变化如图可以画到一个平面直角坐标系上：
@@ -152,7 +186,7 @@ $s_i$       & 第 $i$ 个点的所有人到核酸检测点的距离和 \\ \hline
 \begin{figure}[H]
 	\centering
 	\includegraphics{images/mdst-plot1.png}
-	\caption{图的绝对中心变化的影响\cite{oiwiki-dmst}}
+	\caption{图的绝对中心变化的影响\upcite{oiwiki-mdst}}
 	\label{fig:mdst-graph}
 \end{figure}
 
@@ -163,7 +197,7 @@ $s_i$       & 第 $i$ 个点的所有人到核酸检测点的距离和 \\ \hline
 \begin{figure}[H]
 	\centering
 	\includegraphics{images/mdst-plot2.png}
-	\caption{图的绝对中心变化的影响\cite{oiwiki-dmst}}
+	\caption{图的绝对中心变化的影响\upcite{oiwiki-mdst}}
 	\label{fig:mdst-graph}
 \end{figure}
 
@@ -201,6 +235,56 @@ $s_i$       & 第 $i$ 个点的所有人到核酸检测点的距离和 \\ \hline
 
 \subsubsection{方案一}
 
+建立 $k$ 个核酸检测点，使得每一个人到达核酸检测点的路程和最小。
+
+上文已经证明了采用方案一时核酸检测点一定建在图的节点上。
+
+% 建立优化模型
+
+这个问题难以找到复杂度可以接受的精确算法，于是考虑近似算法。在此，我们采用模拟退火算法进行求解。
+
+算法过程如下：
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \node[startstop](start){开始};
+        \node[process,below of=start,yshift=-0.5cm](init){令温度 $T=T_0$，从 $n$ 个节点中随机选取 $k$ 个作为初始的答案集合 $S$};
+        \node[process,below of=init,yshift=-0.5cm](shift){分别在 $S$ 与 $V\setminus S$ 中随机选择节点 $u$ 与 $v$，设 $S'=(S\setminus\{u\})\cup \{v\}$};
+        \node[rectangle,right of=shift,xshift=6cm,inner sep=0pt](shift1){};
+        \node[rectangle,right of=shift,xshift=6.5cm,inner sep=0pt](shift2){};
+        \node[process,below of=shift,yshift=-0.5cm](calc){分别求出在 $S$ 和 $S'$ 设置采样点时的最短总路程 $D$ 与 $D'$};
+        \node[decision,below of=calc,yshift=-0.5cm](des1){$D'<D$};
+        \node[process,below of=des1,yshift=-0.5cm,xshift=-3cm](accept1){将 $S$ 更新为 $S'$};
+        \node[process,below of=des1,yshift=-0.5cm,xshift=3cm](accept2){以 $e^{-\frac{E'-E}{T}}$ 的概率将 $S$ 更新为 $S'$};
+        \node[rectangle,below of=accept1,yshift=-0.2cm,inner sep=0pt](accept1d){};
+        \node[rectangle,below of=accept2,yshift=-0.2cm,inner sep=0pt](accept2d){};
+        \node[decision,below of=accept1d,yshift=-0.5cm,xshift=3cm](des2){是否迭代了 $L$ 次};
+        \node[process,below of=des2,yshift=-0.5cm,xshift=3cm](upd){$T=\alpha T$};
+        \node[decision,below of=des2,yshift=-1.5cm,xshift=-3cm](des3){$T<T_1$};
+        \node[startstop,below of=des3,yshift=-0.5cm](end){结束};
+        
+        \draw [arrow] (start) -- (init);
+        \draw [arrow] (init) -- (shift);
+        \draw [arrow] (shift) -- (calc);
+        \draw [arrow] (calc) -- (des1);
+        \draw [arrow] (des1) -| (accept1);
+        \draw [arrow] (des1) -| (accept2);
+        \draw (accept1) -- (accept1d);
+        \draw (accept2) -- (accept2d);
+        \draw [arrow] (accept1d) -| (des2);
+        \draw [arrow] (accept2d) -| (des2);
+        \draw [arrow] (des2) -| (upd);
+        \draw [arrow] (des2) -| (des3);
+        \draw [arrow] (des3) -- (end);
+        \draw (upd) -| (shift1);
+        \draw (des3) -| (shift2);
+        \draw [arrow](shift2) -- (shift);
+    \end{tikzpicture}
+    \caption{问题三方案一流程图}
+    \label{fig:3-1-fig}
+\end{figure}
+
 \subsubsection{方案二}
 
 问题转化为给定一张无向图，在其中选择 $k$ 个点，使得每个点距离其最近的核酸检测点距离最大值最小，这个问题不易求解，不妨钦定核酸检测点不会出现在路上（对于一个小区，设置在路上可能会影响交通，所以对最优性影响不大）。
@@ -222,9 +306,9 @@ $s_i$       & 第 $i$ 个点的所有人到核酸检测点的距离和 \\ \hline
 
 发现这个问题可以被经典 NP-C 问题 SAT 多项式规约，所以它是一个 NP-Hard 问题。
 
-经查证，这是一个经典 NP-Hard 问题，集合覆盖问题（Set cover problem,SCP）\cite{wikipedia-SCP}，故精确解只能在非多项式解法中得到，接下来会给出其三种解法，分别为 ILP（整数线性规划），状态压缩动态规划和其近似算法（采用 greedy 算法实现）。
+经查证，这是一个经典 NP-Hard 问题，集合覆盖问题（Set cover problem,SCP）\upcite{wikipedia-SCP}，故精确解只能在非多项式解法中得到，接下来会给出其三种解法，分别为 ILP（整数线性规划），状态压缩动态规划和其近似算法（采用 greedy 算法实现）。
 
-$\textbf{整数线性规划解法}$：
+\paragraph{整数线性规划解法}
 
 限制：
 
@@ -237,9 +321,9 @@ $\textbf{整数线性规划解法}$：
 
 然后我们需要最小化 $\sum\limits_{S \in \mathscr{A}} X_S$。
 
-$\textbf{状态压缩动态规划解法}$：
+\paragraph{状态压缩动态规划解法}
 
-这种做法只能适用于 $n < 20,k \le 10$ 的情况。
+这种做法只能适用于 $n,k$ 较小的情况。
 
 假设 $f_{i,S,j}$ 表示前 $i$ 个集合，选了 $j$ 个，并集为 $S$（集中，$S$ 第 $i$ 为 $1$ 表示数字 $i+1$ 已经出现过了）。
 
@@ -257,7 +341,7 @@ $\textbf{状态压缩动态规划解法}$：
 
 缺点：只可判断，若需给出解法，空间复杂度变为 $\Theta(4^nk)$，所以最后得到距离最近的核酸检测点距离最大值后还需使用其他方法进行构造解。
 
-$\textbf{近似算法}$：
+\paragraph{近似算法}
 
 目前关于集合覆盖问题，仍然找不到一个有效的OPT算法，我们这里提出的是一种基于贪婪策略的近似性算法。
 
@@ -295,21 +379,25 @@ $\textbf{近似算法}$：
 
 所以有 $\sum \operatorname{price}(x) \le (\sum_{i=1}\frac{1}{i}) \cdot \mathscr{S} = H_n \cdot \mathscr{S}$。
 
-不可逼近性结果表明，贪婪算法本质上是集合覆盖到低阶项的最佳多项式时间逼近算法（Dinur&Steurer（2013）通过证明它不能近似于最佳不可近似性来证明最优的不可近似性 ${\displaystyle {\bigl (}1-o(1){\bigr )}\cdot \ln {n}}\text{除非} P{\displaystyle =}NP.)$，在合理的复杂性假设下。对贪婪算法的更严格的分析表明，近似比正好 ${\displaystyle \ln {n}-\ln {\ln {n}}+\Theta(1)}$\cite{greedy-algorithm-for-set-cover}。
+不可逼近性结果表明，如上的贪婪算法本质上是集合覆盖到低阶项的最佳多项式时间逼近算法（Dinur\&Steurer, 2013）通过证明它不能近似于最佳不可近似性来证明最优的不可近似性 ${\displaystyle {\bigl (}1-o(1){\bigr )}\cdot \ln {n}}\text{除非} P{\displaystyle =}NP.)$，在合理的复杂性假设下。对贪婪算法的更严格的分析表明，近似比正好 ${\displaystyle \ln {n}-\ln {\ln {n}}+\Theta(1)}$。\upcite{greedy-algorithm-for-set-cover}
 
 对于一个小区，实测答案较为优秀，如下图，我们保证每个点的点权为 $1$（因为这样方便看出优劣），答案为红色的点 $k=10$。
 
 \begin{figure}[H]
 	\centering
-	\includegraphics{images/Problem3Subtask2.png}
-	\caption{答案}}
+	\includegraphics[width=0.80\textwidth]{images/Problem3Subtask2.png}
+	\caption{答案}
 	\label{fig:mdst-graph}
 \end{figure}
 
-\section{模型评价}
+\section{模型评价与改进}
+
+\subsection{优点}
+
+\subsection{不足}
 
 \newpage
-\bibliographystyle{plain}
+\bibliographystyle{gbt7714-numerical}
 \bibliography{ref}
 \newpage
 
@@ -319,7 +407,7 @@ $\textbf{近似算法}$：
 
 \section{问题一方案一代码}
 
-\begin{lstlisting}[language=cpp]
+\begin{lstlisting}
 #include <iostream>
 using namespace std;
 typedef long long ll;
@@ -382,7 +470,7 @@ void Center_Point(int &u, int &v, double &x) { //返回值为绝对中心在边 
 
 \section{问题一方案二代码}
 
-\begin{lstlisting}[language=cpp]
+\begin{lstlisting}
 #include <iostream>
 using namespace std;
 typedef long long ll;
@@ -412,6 +500,123 @@ int Solve() { // 返回核酸检测点位置
     return ans;
     
     return;
+}
+\end{lstlisting}
+
+\section{问题三方案一代码}
+
+\begin{lstlisting}
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const ll INF = 1e18;
+
+const double T0 = 1e9, T1 = 0.1, a = 0.9;
+const int L = 5, T = 100;
+
+ifstream GIn("Graph.txt");
+ofstream Ans("Ans.txt");
+ofstream Log("Log.txt");
+
+mt19937 mt;
+int Rnd(int L, int R) {
+    return L + mt() % (R - L + 1);
+}
+uniform_real_distribution<double> U(0, 1);
+
+ll G[510][510], Dist[510][510], W[510];
+
+int n, m, k;
+int p[510];
+
+ll ans = INF;
+int ansp[510];
+
+multiset<ll> g[510];
+
+void add(int u) {
+    for (int i = 1; i <= n; i++) {
+        g[i].insert(Dist[i][u]);
+    }
+}
+void del(int u) {
+    for (int i = 1; i <= n; i++) {
+        g[i].erase(Dist[i][u]);
+    }
+}
+ll calc() {
+    ll r = 0;
+    for (int i = 1; i <= n; i++) {
+        r += W[i] * (*g[i].begin());
+    }
+    return r;
+}
+
+void Solve() {
+    for (int i = 1; i <= n; i++)
+        for (int j = 1; j <= n; j++)
+            Dist[i][j] = G[i][j];
+    for (int k = 1; k <= n; k++)
+        for (int i = 1; i <= n; i++)
+            for (int j = 1; j <= n; j++)
+                Dist[i][j] = min(Dist[i][j], Dist[i][k] + Dist[k][j]);
+
+    for (int i = 1; i <= n; i++) p[i] = i;
+    shuffle(p + 1, p + n + 1, mt);
+
+    double T = T0;
+    for (int i = 1; i <= k; i++) add(p[i]);
+    ll D = calc();
+    while (T > T1) {
+        for (int t = 1; t <= L; t++) {
+            int &u = p[Rnd(1, k)];
+            int &v = p[Rnd(k + 1, n)];
+            add(v);
+            del(u);
+            ll r = calc();
+            if (r < D || (U(mt) < exp(-(r - D) / T))) {
+                D = r;
+                swap(u, v);
+            } else {
+                add(u);
+                del(v);
+            }
+            Log << D << "\n";
+            if (D < ans) {
+                ans = D;
+                for (int i = 1; i <= k; i++) ansp[i] = p[i];
+            }
+        }
+        T *= a;
+    }
+    fill(p + k + 1, p + n + 1, 0);
+}
+
+int main() {
+    mt.seed(chrono::system_clock::now().time_since_epoch().count());
+
+    GIn >> n >> m >> k;
+    for (int i = 1; i <= n; i++) GIn >> W[i];
+    for (int i = 1; i <= n; i++)
+        for (int j = 1; j <= n; j++)
+            if (i != j) G[i][j] = INF;
+    for (int i = 1; i <= m; i++) {
+        int u, v;
+        ll w;
+        GIn >> u >> v >> w;
+        G[u][v] = w;
+        G[v][u] = w;
+    }
+
+    for (int i = 1; i <= T; i++) Solve();
+    cout << ans << endl;
+
+    for (int i = 1; i <= k; i++) {
+        Ans << ansp[i] << " ";
+    }
+    Ans << "\n";
+
+    return 0;
 }
 \end{lstlisting}
 
