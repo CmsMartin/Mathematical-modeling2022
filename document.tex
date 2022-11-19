@@ -7,6 +7,10 @@
 \usepackage{subfig}
 \usepackage{footnote}
 \usepackage{mathrsfs}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
 % \documentclass[withoutpreface,bwprint]{cumcmthesis} %去掉封面与编号页
 
 \usepackage{url}
@@ -208,7 +212,7 @@ $s_i$       & 第 $i$ 个点的所有人到核酸检测点的距离和 \\ \hline
 
 经查证，这是一个经典 NP-Hard 问题，集合覆盖问题（Set cover problem,SCP）\cite{wikipedia-SCP}，故精确解只能在非多项式解法中得到，接下来会给出其三种解法，分别为 ILP（整数线性规划），状态压缩动态规划和其近似算法（采用 greedy 算法实现）。
 
-\subsubsubsection{整数线性规划}
+$\textbf{整数线性规划解法}$：
 
 限制：
 
@@ -221,13 +225,70 @@ $s_i$       & 第 $i$ 个点的所有人到核酸检测点的距离和 \\ \hline
 
 然后我们需要最小化 $\sum\limits_{S \in \mathscr{A}} X_S$。
 
-\subsubsubsection{状态压缩动态规划}
+$\textbf{状态压缩动态规划解法}$：
 
-\subsubsubsection{近似算法}
+这种做法只能适用于 $n < 20,k \le 10$ 的情况。
+
+假设 $f_{i,S,j}$ 表示前 $i$ 个集合，选了 $j$ 个，并集为 $S$（集中，$S$ 第 $i$ 为 $1$ 表示数字 $i+1$ 已经出现过了）。
+
+设 $A_i$ 对应的 $n$ 位二进制数位 $B_i$。
+
+状态转移：
+
+\begin{equation*}
+    f_{i,S,j} = \Big ( \bigvee_{S'\vee B_i = S}{f_{i-1,S',j-1}} \Big ) \vee f_{i-1,S,j}
+\end{equation*}
+
+初始状态 $f_{0,0,0} = true$。
+
+时间复杂度 $\Theta(nk2^n)$，空间复杂度 $\Theta(nk2^n)$，空间复杂度可使用滚动数组优化到 $\Theta(2^nk)$。
+
+缺点：只可判断，若需给出解法，空间复杂度变为 $\Theta(4^nk)$，所以最后得到距离最近的核酸检测点距离最大值后还需使用其他方法进行构造解。
+
+$\textbf{近似算法}$：
+
+目前关于集合覆盖问题，仍然找不到一个有效的OPT算法，我们这里提出的是一种基于贪心策略的近似性算法。
+
+算法过程为如下伪代码：
+
+\begin{algorithm}
+    \caption{Greedy Set Cover Algorithm}
+    \begin{algorithmic}[1]
+        \Require 集合 $A_i$
+        \Ensure 选择方式
+        \State $C \gets \emptyset$
+        \State $\mathscr{A} \gets \emptyset$
+        \While{$C \neq [1,n]$}
+            \State Find the set $A$ whose $|A\setminus C|$ is biggest
+            \State $C = C \cup A$
+            \State Add $A$ into $\mathscr{A}$
+        \EndWhile
+        \State \Return $\mathscr{A}$
+    \end{algorithmic}
+\end{algorithm}
+
+我们每次选取的都是 $|A\setminus C|$ 最大的集合 $A_i$，即每次新添加的集合 $A$ 的覆盖率都是最大的，从而保证局部最优。
+
+性能分析：
+
+在贪心算法的每次迭代过程中，剩下元素OPT算法的 $cost$ 必定小于等于原问题OPT算法的 $cost$，那么有：$\frac{|A|}{|[1,n]\setminus C|}$。
+
+设最优解的答案为 $\mathscr{S}$。
+
+接着对于数字 $x$，设 $|C| \le w$，那么显然 $|[1,n]\setminus C| \ge n - w$。
+
+所以数字 $x$ 被覆盖的代价 $\operatorname{price}(x) \le {|A|}{n-w+1}$。
+
+于是就证明了这个近似算法得出的 $|\mathscr{A}| \le H_n \cdot \mathscr{S}$。
+
+所以有 $\sum \operatorname{price}(x) \le (\sum_{i=1}\frac{1}{i}) \cdot \mathscr{S} = H_n \cdot \mathscr{S}$。
+
+不可逼近性结果表明，贪婪算法本质上是集合覆盖到低阶项的最佳多项式时间逼近算法（Dinur&Steurer（2013）通过证明它不能近似于最佳不可近似性来证明最优的不可近似性 ${\displaystyle {\bigl (}1-o(1){\bigr )}\cdot \ln {n}}\text{除非} P{\displaystyle =}NP.)$，在合理的复杂性假设下。对贪婪算法的更严格的分析表明，近似比正好 ${\displaystyle \ln {n}-\ln {\ln {n}}+\Theta(1)}$\cite{greedy-algorithm-for-set-cover}。
+
 
 \section{模型评价}
 
-
+\newpage
 \bibliographystyle{plain}
 \bibliography{ref}
 \newpage
