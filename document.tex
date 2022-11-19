@@ -297,7 +297,14 @@ $\textbf{近似算法}$：
 
 不可逼近性结果表明，贪婪算法本质上是集合覆盖到低阶项的最佳多项式时间逼近算法（Dinur&Steurer（2013）通过证明它不能近似于最佳不可近似性来证明最优的不可近似性 ${\displaystyle {\bigl (}1-o(1){\bigr )}\cdot \ln {n}}\text{除非} P{\displaystyle =}NP.)$，在合理的复杂性假设下。对贪婪算法的更严格的分析表明，近似比正好 ${\displaystyle \ln {n}-\ln {\ln {n}}+\Theta(1)}$\cite{greedy-algorithm-for-set-cover}。
 
-对于一个小区，实测答案较为优秀。
+对于一个小区，实测答案较为优秀，如下图，我们保证每个点的点权为 $1$（因为这样方便看出优劣），答案为红色的点 $k=10$。
+
+\begin{figure}[H]
+	\centering
+	\includegraphics{images/Problem3Subtask2.png}
+	\caption{答案}}
+	\label{fig:mdst-graph}
+\end{figure}
 
 \section{模型评价}
 
@@ -422,76 +429,77 @@ long long G[MAXN][MAXN];
 bitset<MAXN> Ans;
 
 bool Check(long long x) {
-	vector<int> S;
-	bitset<MAXN> C;
-	for (int i = 1; i <= N; i++) A[i].reset();
-	for (int i = 1; i <= N; i++) {
-		for (int j = 1; j <= N; j++) {
-			if (W[i] * G[i][j] <= x) {
-				A[i][j] = true;
-			}
-		}
-	}
-	while (C != U) {
-		pair<int, int> Max = {0, 0};
-		for (int i = 1; i <= N; i++) {
-			int x = 0;
-			for (int j = 1; j <= N; j++) {
-				if (A[i][j] == 1 && C[j] == 0) {
-					x++;
-				}
-			}
-			if (x > Max.first) {
-				Max = {x, i};
-			}
-		}
-		C = C | A[Max.second];
-		S.push_back(Max.second);
-		if (S.size() > K) return false;
-	}
-	Ans.reset();
-	for (int i : S) Ans[i] = true;
-	return true;
+    vector<int> S;
+    bitset<MAXN> C;
+    for (int i = 1; i <= N; i++) A[i].reset();
+    for (int i = 1; i <= N; i++) {
+        for (int j = 1; j <= N; j++) {
+            if (W[i] * G[i][j] <= x) {
+                A[i][j] = true;
+            }
+        }
+    }
+    while (C != U) {
+        pair<int, int> Max = {0, 0};
+        for (int i = 1; i <= N; i++) {
+            int x = 0;
+            for (int j = 1; j <= N; j++) {
+                if (A[i][j] == 1 && C[j] == 0) {
+                    x++;
+                }
+            }
+            if (x > Max.first) {
+                Max = {x, i};
+            }
+        }
+        C = C | A[Max.second];
+        S.push_back(Max.second);
+        if (S.size() > K) return false;
+    }
+    Ans.reset();
+    for (int i : S) Ans[i] = true;
+    return true;
 }
 
 int main() {
-	scanf("%d %d %d" ,&N ,&M ,&K);
-	memset(G, 0x3f, sizeof G);
-	for (int i = 1; i <= N; i++) {
-		scanf("%d" ,&W[i]);
-		G[i][i] = 0;
-		U[i] = true;
-	}
-	for (int i = 1; i <= M; i++) {
-		static int u, v, w;
-		scanf("%d %d %d" ,&u ,&v ,&w);
-		G[u][v] = w;
-		G[v][w] = w;
-	}
-	for (int k = 1; k <= N; k++) {
-		for (int i = 1; i <= N; i++) {
-			for (int j = 1; j <= N; j++) {
-				G[i][j] = min(G[i][k] + G[k][j], G[i][j]);
-			}
-		}
-	}
-	long long l = 1, r = 0;
-	for (int i = 1; i <= N; i++) {
-		for (int j = 1; j <= N; j++) {
-			r = max(r, W[i] * G[i][j]);
-		}
-	}
-	while (l <= r) {
-		long long mid = l + r >> 1;
-		if (Check(mid)) r = mid - 1;
-		else l = mid + 1; 
-	}
-	for (int i = 1; i <= N; i++) {
-		if (Ans[i]) {
-			cout << i << " ";
-		}
-	}
-	return 0;
+    scanf("%d %d %d" ,&N ,&M ,&K);
+    memset(G, 0x3f, sizeof G);
+    for (int i = 1; i <= N; i++) {
+        scanf("%d" ,&W[i]);
+        W[i]++;
+        G[i][i] = 0;
+        U[i] = true;
+    }
+    for (int i = 1; i <= M; i++) {
+        static int u, v, w;
+        scanf("%d %d %d" ,&u ,&v ,&w);
+        G[u][v] = w;
+        G[v][u] = w;
+    }
+    for (int k = 1; k <= N; k++) {
+        for (int i = 1; i <= N; i++) {
+            for (int j = 1; j <= N; j++) {
+                G[i][j] = min(G[i][k] + G[k][j], G[i][j]);
+            }
+        }
+    }
+    long long l = 1, r = 0;
+    for (int i = 1; i <= N; i++) {
+        for (int j = 1; j <= N; j++) {
+            r = max(r, W[i] * G[i][j]);
+        }
+    }
+    while (l <= r) {
+        long long mid = l + r >> 1;
+        if (Check(mid)) r = mid - 1;
+        else l = mid + 1; 
+    }
+    for (int i = 1; i <= N; i++) {
+        if (Ans[i]) {
+            cout << i << " ";
+        }
+    }
+    return 0;
 }
 \end{lstlisting}
 
