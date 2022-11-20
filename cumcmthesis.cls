@@ -354,7 +354,7 @@ Just choose `xelatex', no `pdflatex' or `latex' and so on.}
 %   \null
  % 承诺书
 %  \vskip2ex
-  \thispagestyle{empty}
+  % \thispagestyle{empty}
 %   {\zihao{4}\noindent\mcm@commit@string@headname\\[-8pt]
 %   \noindent\rule[5pt]{\textwidth-1.34em}{.5pt}\par}
 %   \begin{center}%
