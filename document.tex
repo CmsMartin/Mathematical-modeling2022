@@ -51,8 +51,10 @@
 \usepackage{footnote}
 
 \usepackage{graphicx}
+\usepackage{makecell}
 \usepackage{float}
 \usepackage{subfig}
+\usepackage{array}
 
 \begin{document}
 
@@ -128,6 +130,7 @@
 \section{符号说明}
 \begin{center}
 \begin{savenotes}
+\renewcommand{\arraystretch}{1.38}
 \begin{tabular}{cc}
 \toprule[2pt]
 \makebox[0.3\textwidth][c]{符号}	&  \makebox[0.4\textwidth][c]{意义} \\ \midrule[1pt]
@@ -554,11 +557,64 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule[2pt]
 
 \section{支撑材料文件列表}
 
+<<<<<<< HEAD
+\begin{table*}[htbp]
+    \centering
+    \renewcommand{\arraystretch}{1}
+    \begin{small}
+    \begin{tabular}{l}
+        \Xhline{2pt}
+        \makebox[\textwidth][l]{\textbf{支撑材料}}\\
+        \Xhline{1pt}
+        \hspace{2em}readme.txt\\
+        \hspace{2em}\textbf{images}\\
+        \hspace{4em}graph.png\\
+        \hspace{4em}graph\_Face.png\\
+        \hspace{4em}graph-with-map.png\\
+        \hspace{4em}mdst-plot1.png\\
+        \hspace{4em}mdst-plot2.png\\
+        \hspace{4em}Problem1Subtask1Ans.png\\
+        \hspace{4em}Problem1Subtask2Ans.png\\
+        \hspace{4em}Problem3Subtask1.png\\
+        \hspace{4em}Problem3Subtask1F.png\\
+        \hspace{4em}Problem3Subtask2.png\\
+        \hspace{4em}Problem3Subtask2F.png\\
+        \hspace{4em}SA.eps\\
+        \hspace{4em}scaled.png\\
+        \hspace{4em}Single-1.eps\\
+        \hspace{2em}\textbf{src}\\
+        \hspace{4em}P1T1.cpp\\
+        \hspace{4em}P1T2.cpp\\
+        \hspace{4em}P3T1.cpp\\
+        \hspace{4em}P3T2.cpp\\
+        \hspace{4em}vis.py\\
+        \hspace{4em}vis\_ans.py\\
+        \hspace{4em}vis\_nx.py\\
+        \hspace{4em}draw.py\\
+        \hspace{2em}\textbf{data}\\
+        \hspace{4em}\textbf{sample1}\\
+        \hspace{6em}Geo.txt\\
+        \hspace{6em}Graph.txt\\
+        \hspace{6em}Value.txt\\
+        \hspace{4em}\textbf{sample2}\\
+        \hspace{6em}Geo.txt\\
+        \hspace{6em}Graph.txt\\
+        \hspace{6em}Value.txt\\
+        \Xhline{2pt}
+    \end{tabular}
+    \end{small}
+\end{table*}
+
+具体说明详见 readme.txt。
+
+
+=======
 \begin{tabular}{cc}
      
       
 \end{tabular}
 
+>>>>>>> ccbe2a5a50480531aa934d629fcebe72fa6f8b64
 \section{问题一目标一代码}
 
 \begin{lstlisting}
