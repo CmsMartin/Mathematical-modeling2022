@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2022.3.27)  20 NOV 2022 07:43
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2022.3.27)  20 NOV 2022 11:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1284,12 +1284,6 @@ LaTeX Warning: Label `fig:mdst-graph' multiply defined.
 
 LaTeX Warning: Label `fig:mdst-graph@cref' multiply defined.
 
-
-LaTeX Warning: Label `fig:mdst-graph' multiply defined.
-
-
-LaTeX Warning: Label `fig:mdst-graph@cref' multiply defined.
-
 )
 \openout1 = `document.aux'.
 
@@ -1876,15 +1870,13 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
 put line 418.
  [9]
-File: images/Problem3Subtask2.png Graphic file (type bmp)
-<images/Problem3Subtask2.png>
 File: images/scaled.png Graphic file (type bmp)
 <images/scaled.png>
- [10]
 File: images/graph-with-map.png Graphic file (type bmp)
 <images/graph-with-map.png>
 File: images/graph.png Graphic file (type bmp)
 <images/graph.png>
+ [10]
 File: images/Problem1Subtask1Ans.png Graphic file (type bmp)
 <images/Problem1Subtask1Ans.png>
 File: images/Problem1Subtask2Ans.png Graphic file (type bmp)
@@ -1904,58 +1896,58 @@ File: images/Problem3Subtask2F.png Graphic file (type bmp)
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\leavevmode@ifvmode' on input line 526.
+(hyperref)                removing `\leavevmode@ifvmode' on input line 519.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                \kern 2.00876pt
-(hyperref)                removed on input line 526.
+(hyperref)                removed on input line 519.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\leavevmode@ifvmode' on input line 526.
+(hyperref)                removing `\leavevmode@ifvmode' on input line 519.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                \kern 2.00876pt
-(hyperref)                removed on input line 526.
+(hyperref)                removed on input line 519.
 
 [14]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\leavevmode@ifvmode' on input line 532.
+(hyperref)                removing `\leavevmode@ifvmode' on input line 525.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                \kern 2.00876pt
-(hyperref)                removed on input line 532.
+(hyperref)                removed on input line 525.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\leavevmode@ifvmode' on input line 532.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                \kern 2.00876pt
-(hyperref)                removed on input line 532.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\leavevmode@ifvmode' on input line 538.
+(hyperref)                removing `\leavevmode@ifvmode' on input line 525.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                \kern 2.00876pt
-(hyperref)                removed on input line 538.
+(hyperref)                removed on input line 525.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\leavevmode@ifvmode' on input line 538.
+(hyperref)                removing `\leavevmode@ifvmode' on input line 531.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                \kern 2.00876pt
-(hyperref)                removed on input line 538.
+(hyperref)                removed on input line 531.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\leavevmode@ifvmode' on input line 531.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                \kern 2.00876pt
+(hyperref)                removed on input line 531.
 
 [15] (./document.bbl) [16]
 
@@ -1983,12 +1975,12 @@ LaTeX Font Warning: Size substitutions with differences
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `document.out' has not changed.
-(rerunfilecheck)             Checksum: 56B2CB6AA1549C19F7BB757E520F2F2C;3077.
+(rerunfilecheck)             Checksum: 2C574FBE457A11DA67036DE9A4E4C289;3077.
  ) 
 Here is how much of TeX's memory you used:
  35490 strings out of 476919
  725475 string characters out of 5825424
- 1402467 words of memory out of 5000000
+ 1402468 words of memory out of 5000000
  54725 multiletter control sequences out of 15000+600000
  427370 words of font info for 188 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
