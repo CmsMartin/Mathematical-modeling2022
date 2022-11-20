@@ -62,19 +62,19 @@
 
 合理地选择核酸检测点的位置可以很大程度上方便居民的核酸检测。本文将小区结构抽象为图结构，对不同的小区中核酸检测点的规划进行了研究，分析核酸检测点位置与人群流动的关系，考虑了多种评价标准与约束条件，对于使总路程和最长路程分别最小的目标分别建立了图论模型。
 
-\textbf{对于问题一}：针对两种目标，笔者先通过枚举核酸检测点所在的边，将原问题转化为单变量优化问题，再经过分析，得出结论：使总路程最小时，核酸检测点一定在点上；使最大路程最小时，核酸检测点在图的绝对中心上。最后，笔者提出了复杂度可以接受的两种算法
+\textbf{对于问题一}：针对两种目标，笔者先通过枚举核酸检测点所在的边，将原问题转化为单变量优化问题，再经过分析，得出结论：使总路程最小时，核酸检测点一定在点上；使最大路程最小时，核酸检测点在图的绝对中心上。最后，笔者提出了复杂度可以接受的两种算法。
 
 \textbf{对于问题二}：笔者把问题一的结论进行推广，并针对两种目标提出相应的朴素算法。
 
 \textbf{对于问题三}：针对目标一，笔者先建立了整数规划模型，再提出了一种基于模拟退火的智能算法来求出近似最优解。
-针对目标二，先用二分法把原问题转化为 Set cover problem(SCP)，再针对该问题建立整数线性规划与动态规划模型，由于 Set cover porblem 是 NP-Hard 的，使用了一种 Greedy 算法来近似地求解该问题。
+针对目标二，先用二分法把原问题转化为 Set cover problem(SCP)，再针对该问题建立整数线性规划与动态规划模型，由于 Set cover porblem 是 NP-Hard 的，使用了一种随机化的 Greedy 算法来近似地求解该问题，并推导得出了近似解与最优解偏差的一个上界。
 
 最后，笔者分析了不同小区结构对模型的影响，并得出以下结论：
 
 \begin{enumerate}
     \item 核酸检测点趋向于在人口密集处设置；
     \item 当核酸检测点只有一个时，最优解一般在小区中心附近；
-    \item 当核酸检测点够多时，它们趋向于分布在人口较多的“块”中。
+    \item 当核酸检测点够多时，最优解一般较为均匀地分布在小区中。
 \end{enumerate}
 
 
@@ -162,13 +162,21 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 
 使得每一个人到达核酸检测点的路程和最小。
 
-对于点 $i$，点 $i$ 上的所有人到核酸检测点的路程和为 $s_i=w_i\cdot\min\left\{d_{u_k,i}+x,d_{v_k,i}+e_k-x\right\}$。我们可以
-把 $s_i$ 随 $x$ 的变化表示在平面直角坐标系上。
+由图可得，点 $i$ 上的人采样所走的最短距离为 $\min\left\{d_{u_k,i}+x,d_{v_k,i}+e_k-x\right\}$，路程和为 $s_i=w_i\cdot\min\left\{d_{u_k,i}+x,d_{v_k,i}+e_k-x\right\}$。
+
+可以发现 $s_i$ 关于 $x$ 的图象一定是一条先升再降的折线或者是直线，因此一定是上凸的。由于每个 $s_i$ 关于 $x$ 是上凸的，所以总路程 $D(x)=\sum_{i=1}^n s_i$ 也是上凸的。
+因此得：
+
+\begin{equation*}
+    D(x)\ge\min\left\{D(0),D(e_k)\right\}
+\end{equation*}
+
+即核酸检测点一定在某个点上。
 
 % $x=\frac{d_{v_k,i}+e_k-d_{u_k,i}}{2}$ 是图象的转折点。
 
-可以发现图象一定是一条先升再降的折线或者是直线，因此一定是上凸的。由于每个 $s_i$ 关于 $x$ 是上凸的，所以总路程 $\sum_{i=1}^n s_i$ 也是上凸的。
-因此 $\sum_{i=1}^n s_i$ 在区间 $[0,e_k]$ 上的最小值一定在 $x=0$ 或 $x=e_k$ 时取到，即核酸检测点一定在某个点上。
+% 可以发现图象一定是一条先升再降的折线或者是直线，因此一定是上凸的。由于每个 $s_i$ 关于 $x$ 是上凸的，所以总路程 $\sum_{i=1}^n s_i$ 也是上凸的。
+% 因此 $\sum_{i=1}^n s_i$ 在区间 $[0,e_k]$ 上的最小值一定在 $x=0$ 或 $x=e_k$ 时取到，即核酸检测点一定在某个点上。
 
 以下是算法过程：
 
@@ -177,7 +185,7 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
     \item 枚举每一个点，求出 $\sum_{i=1}^n s_i$，并更新答案。
 \end{enumerate}
 
-如果使用堆优化的 Dijkstra 求解最短路，时间复杂度为 $\Theta(n^2\log m)$,若使用 Floyd，时间复杂度为 $\Theta(n^3)$
+如果使用堆优化的 Dijkstra 求解最短路，时间复杂度为 $\Theta(n^2\log m)$,若使用 Floyd，时间复杂度为 $\Theta(n^3)$。
 
 \subsubsection{目标二}
 
@@ -285,8 +293,8 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 则可以如下建立规划模型：
 
 \begin{align*}
-    \min &\sum_{i=1}^n \left(w_i \min_{x_j=1} d_{i,j}\right)\\
-    \operatorname{s.t.} &\sum_{i=1}^n x_i=k
+    &\min\sum_{i=1}^n \left(w_i \min_{x_j=1} d_{i,j}\right)\\
+    &\operatorname{s.t.}\begin{cases}\sum_{i=1}^n x_i=k\\x_i\in\{0,1\}\end{cases}
 \end{align*}
 
 \paragraph{模拟退火解法}
@@ -335,12 +343,14 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
     \label{fig:3-1-fig}
 \end{figure}
 
-在若干次迭代后答案会趋于稳定，如下图所示：
+经过测试，得到一组较为满意的参数：$T_0=10^9,T_1=0.1,\alpha=0.9,L=5$。为了避免偶然性，可以把这个算法执行 $100$ 次，并取其中的最优解。
+
+下图为多次模拟退火时总距离随迭代次数的变化过程：
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.80\textwidth]{images/SA.png}
-	\caption{模拟退火求得的答案}
+	\includegraphics[width=0.80\textwidth]{images/SA.eps}
+	\caption{模拟退火求解过程}
 	\label{fig:P3T1-SA}
 \end{figure}
 
@@ -432,21 +442,21 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 
 我们每次选取的都是 $|A\setminus C|$ 最大的集合 $A_i$，即每次新添加的集合 $A$ 的覆盖率都是最大的，从而保证局部最优。
 
-\paragraph{性能分析}：
+\paragraph{性能分析}
 
 设最优解的答案为 $\mathscr{S}$，$\operatorname{cost_{opt}}X$ 表示此时选择集合 $X$ 的最优解。
 
-在贪婪算法的每次迭代过程中，剩下元素OPT算法的 $cost$ 必定小于等于原问题OPT算法的 $cost$，所以剩余集合平均的 $cost$ 不大于 $\frac{|\operatorname{cost_{opt}}A|}{|[1,n]\setminus C|}$。
+在贪婪算法的每次迭代过程中，剩下元素OPT算法的 $cost$ 必定小于等于原问题OPT算法的 $cost$，所以剩余集合平均的 $cost$ 不大于 $\frac{|\operatorname{cost_{opt}}A|}{|[1,n]\setminus C|}$。\footnote{此处 $[1,n]$ 指整数区间 $\mathbb{Z}\cap[1,n]$，下同。}
 
 接着对于数字 $x$，设覆盖其前的 $|C| \le w$，那么显然 $|[1,n]\setminus C| \ge n - w + 1$。
 
 所以数字 $x$ 被覆盖的平均代价 $\operatorname{price}(x) \le \frac{|\operatorname{cost_{opt}}A|}{n-w+1}$。
 
-所以有 $\sum \operatorname{price}(x) \le (\sum_{i=1}\frac{1}{i}) \cdot \mathscr{S} = H_n \cdot \mathscr{S}$。
+设 $H_n=\sum_{i=1}^n\frac 1 i$ 为调和级数前 $n$ 项之和，有 $\sum \operatorname{price}(x) \le (\sum_{i=1}\frac{1}{i}) \cdot \mathscr{S} = H_n \cdot \mathscr{S}$。
 
 于是就证明了这个近似算法得出的 $|\mathscr{A}| \le H_n \cdot \mathscr{S}$。
 
-不可逼近性结果表明，如上的贪婪算法本质上是集合覆盖到低阶项的最佳多项式时间近似算法（Dinur\&Steurer, 2013）通过证明它不能近似于最佳不可近似性来证明最优的不可近似性 ${\displaystyle {\bigl (}1-o(1){\bigr )}\cdot \ln {n}}\text{除非} P{\displaystyle =}NP.)$，在合理的复杂性假设下。对贪婪算法的更严格的分析表明，近似比正好 ${\displaystyle \ln {n}-\ln {\ln {n}}+\Theta(1)}$。\upcite{greedy-algorithm-for-set-cover}
+不可逼近性结果表明，如上的贪婪算法本质上是集合覆盖到低阶项的最佳多项式时间近似算法（Dinur\&Steurer, 2013）通过证明它不能近似于最佳不可近似性来证明最优的不可近似性 ${\displaystyle {\bigl (}1-o(1){\bigr )}\cdot \ln {n}}\text{ 除非 } P{\displaystyle =}NP$，在合理的复杂性假设下。对贪婪算法的更严格的分析表明，近似比正好 ${\displaystyle \ln {n}-\ln {\ln {n}}+\Theta(1)}$。\upcite{greedy-algorithm-for-set-cover}
 
 对于一个小区，实测答案较为优秀，会在模型分析中给出实例。
 
@@ -461,7 +471,7 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
     \label{fig:scaled}
 \end{figure}
 
-将主要的空地和建筑作为节点，相邻节点连边权为几何距离的边，并设置合理的人口数，得到如下无向图。图中节点大小表示人口多少，空地人口数为 $0$。
+将主要的空地和建筑作为节点，相邻节点连边权为几何距离的边（为了方便，以毫米为单位并取整），并设置合理的人口数，得到如下无向图。图中节点大小表示人口多少，空地人口数为 $0$。
 
 \begin{figure}[H]
 	\centering
@@ -530,7 +540,7 @@ $D$         & 所有人到核酸检测点的总距离和 \\ \bottomrule
 
 \subsection{总结}
 
-虽有不足，但笔者在一些真实出现的小区上的测试，均得到了较为满意的答案，确实满足了绝大部分人的利益，并保证基本所有人不会感到不公平。
+虽有不足，但笔者在真实出现的小区上的测试，均得到了较为满意的答案，确实满足了绝大部分人的利益，并保证基本所有人不会感到不公平。
 
 \newpage
 \bibliographystyle{gbt7714-numerical}
